@@ -1,9 +1,11 @@
 package edu.sjsu.controller;
 
 import edu.sjsu.compe275.lab2.Passenger;
+import edu.sjsu.dao.PassengerRepository;
 import edu.sjsu.model.Greeting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,6 +20,8 @@ public class PassangerController {
     private final AtomicLong counter = new AtomicLong();
     public static final Logger logger = LoggerFactory.getLogger(PassangerController.class);
 
+    @Autowired
+    PassengerRepository passengerRepository;
 
     //---------------get a passenger ------------------------------------
 
@@ -29,9 +33,15 @@ public class PassangerController {
     // -------------------Create a passenger-------------------------------------------
 
     @RequestMapping(value = "/passenger/", method = RequestMethod.POST)
-    public void createPassenger(@RequestBody Passenger passenger) {
+    public String createPassenger(@RequestBody Passenger passenger) {
         logger.info("Creating passenger : {}", passenger);
 
+        try{
+            passengerRepository.save(passenger);
+        }catch (Exception ex) {
+            return "bas request";
+        }
+        return "User succesfully created with id = " + passenger.getId();
     }
 
     // ------------------- Update a User ------------------------------------------------
