@@ -28,7 +28,7 @@ public class PassangerController {
 
     // -------------------Create a passenger-------------------------------------------
 
-    @RequestMapping(value = "/user/", method = RequestMethod.POST)
+    @RequestMapping(value = "/passenger/", method = RequestMethod.POST)
     public void createPassenger(@RequestBody Passenger passenger) {
         logger.info("Creating passenger : {}", passenger);
 
@@ -36,9 +36,9 @@ public class PassangerController {
 
     // ------------------- Update a User ------------------------------------------------
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/passenger/{id}", method = RequestMethod.PUT)
     public void updatePassenger(@PathVariable("id") long id, @RequestBody Passenger passenger) {
-        logger.info("Updating User with id {}", id);
+        logger.info("Updating passenger with id {}", id);
 
         /*User currentUser = userService.findById(id);
 
@@ -58,9 +58,9 @@ public class PassangerController {
 
     // ------------------- Delete a passenger-----------------------------------------
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/passenger/{id}", method = RequestMethod.DELETE)
     public void deletePassenger(@PathVariable("id") long id) {
-        logger.info("Fetching & Deleting User with id {}", id);
+        logger.info("Fetching & Deleting passenger with id {}", id);
 
        /* User user = userService.findById(id);
         if (user == null) {

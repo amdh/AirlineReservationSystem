@@ -1,9 +1,19 @@
 package edu.sjsu.compe275.lab2;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by Amruta on 4/15/2017.
  */
+
+@Entity
 public class Passenger {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String firstname;
     private String lastname;
@@ -14,6 +24,7 @@ public class Passenger {
     public Passenger(String firstname){
         this.firstname = firstname;
     }
+
     public String getId() {
         return id;
     }
