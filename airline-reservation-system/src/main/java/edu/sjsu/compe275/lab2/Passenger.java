@@ -21,6 +21,8 @@ public class Passenger {
     private String gender;
     private String phone; // Phone numbers must be unique
 
+    public Passenger(){}
+
     public Passenger(String firstname){
         this.firstname = firstname;
     }

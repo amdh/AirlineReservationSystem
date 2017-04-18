@@ -6,6 +6,7 @@ import edu.sjsu.model.Greeting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,11 +15,12 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by Amruta on 4/15/2017.
  */
 @RestController
-public class PassangerController {
+@EnableAutoConfiguration
+public class PassengerController {
 
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
-    public static final Logger logger = LoggerFactory.getLogger(PassangerController.class);
+    public static final Logger logger = LoggerFactory.getLogger(PassengerController.class);
 
     @Autowired
     PassengerRepository passengerRepository;
