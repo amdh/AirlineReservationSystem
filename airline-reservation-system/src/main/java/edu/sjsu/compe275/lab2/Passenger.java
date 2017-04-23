@@ -12,19 +12,31 @@ import javax.persistence.Id;
 @Entity
 public class Passenger {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
+    @Column(type="text" , name="passenger_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
+
     private String firstname;
+
     private String lastname;
+
     private int age;
+
     private String gender;
+
     private String phone; // Phone numbers must be unique
+
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private Set<Reservation> reservations;
 
     public Passenger(String firstname){
         this.firstname = firstname;
     }
 
+    //-----------setter getter-----------------
     public String getId() {
         return id;
     }
@@ -71,5 +83,13 @@ public class Passenger {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

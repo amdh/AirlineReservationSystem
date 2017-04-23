@@ -25,9 +25,18 @@ public class PassangerController {
 
     //---------------get a passenger ------------------------------------
 
-    @RequestMapping(value = "/passenger/{id}", method = RequestMethod.GET)
-    public Passenger getPassenger(@PathVariable("id") long id) {
-        return new Passenger("Amz");
+    @RequestMapping(value = "/passenger/{id}?xml=true", method = RequestMethod.GET, , produces={MediaType.APPLICATION_XML_VALUE})
+    public Passenger getPassenger(@PathVariable("id") String id) {
+        Passenger p = passengerRepository.findById(id)
+
+        return p;
+    }
+
+    @RequestMapping(value = "/passenger/{id}?json=true", method = RequestMethod.GET, , produces = MediaType.APPLICATION_JSON_VALUE)
+    public Passenger getPassenger(@PathVariable("id") String id) {
+        Passenger p = passengerRepository.findById(id)
+
+        return p;
     }
 
     // -------------------Create a passenger-------------------------------------------

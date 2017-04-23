@@ -6,10 +6,18 @@ import java.util.List;
 /**
  * Created by Amruta on 4/15/2017.
  */
+@Entity
 public class Flight {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(type="text")
     private String number; // Each flight has a unique flight number.
+
     private int price;
+
     private String from;
+
     private String to;
 
     /*  Date format: yy-mm-dd-hh, do not include minutes and sceonds.
@@ -17,11 +25,22 @@ public class Flight {
     The system only needs to supports PST. You can ignore other time zones.*/
 
     private Date departureTime;
+
     private Date arrivalTime;
+
     private int seatsLeft;
+
     private String description;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "model")
     private Plane plane;  // Embedded
+
+
     private List<Passenger> passengers;
+
+
+    //---------------setter getter
 
     public String getNumber() {
         return number;

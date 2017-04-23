@@ -3,11 +3,18 @@ package edu.sjsu.compe275.lab2;
 /**
  * Created by Amruta on 4/15/2017.
  */
+@Entity
 public class Plane {
 
     private int capacity;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(type="text")
     private String model;
+
     private String manufacturer;
+
     private int yearOfManufacture;
 
     public int getCapacity() {

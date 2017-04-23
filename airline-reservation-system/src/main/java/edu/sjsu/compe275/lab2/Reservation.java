@@ -4,10 +4,26 @@ import java.util.*;
 /**
  * Created by Amruta on 4/15/2017.
  */
+@Entity
+@Table(name = "reservation")
 public class Reservation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private String orderNumber;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name = "passenger_id")
     private Passenger passenger;
+
     private int price; // sum of each flight’s price.
+
+
+    @JoinTable(name="flight_reservation",
+    joinColumns= { @JoinColumn(name = "orderNumber", referencedColumnName ="orderNumber")},
+    inverseJoinColumns={@JoinColumn(name="flightNumber" , referencedColumnName="number")})
+    @ManyToMany
     private List<Flight> flights;
 
 
