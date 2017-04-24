@@ -31,6 +31,7 @@ public class Reservation {
     @ManyToMany
     private List<Flight> flights;
 
+    
 
     public String getOrderNumber() {
         return orderNumber;
