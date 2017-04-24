@@ -1,9 +1,19 @@
 package edu.sjsu.compe275.lab2;
 
-import javax.persistence.*;
+
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Created by Amruta on 4/15/2017.
@@ -12,14 +22,16 @@ import java.util.Set;
 public class Flight {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column()
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String number; // Each flight has a unique flight number.
 
     private int price;
 
+    @Column(name="from_source")
     private String from;
 
+    @Column(name="to_destination")
     private String to;
 
     /*  Date format: yy-mm-dd-hh, do not include minutes and sceonds.
@@ -39,8 +51,12 @@ public class Flight {
     private Plane plane;  // Embedded
 
 
-    private List<Passenger> passengers;
+    @Transient
+    private Set<Passenger> passengers;
 
+    public Flight(String number){
+    	this.number = number;
+    }
 
     //---------------setter getter
 
@@ -116,11 +132,11 @@ public class Flight {
         this.plane = plane;
     }
 
-    public List<Passenger> getPassengers() {
+    public Set<Passenger> getPassengers() {
         return passengers;
     }
 
-    public void setPassengers(List<Passenger> passengers) {
+    public void setPassengers(Set<Passenger> passengers) {
         this.passengers = passengers;
     }
 }

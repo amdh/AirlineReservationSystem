@@ -1,7 +1,16 @@
 package edu.sjsu.compe275.lab2;
 
-import javax.persistence.*;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Created by Amruta on 4/15/2017.
@@ -13,8 +22,8 @@ public class Passenger {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name="passenger_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     private String firstname;
@@ -25,13 +34,26 @@ public class Passenger {
 
     private String gender;
 
+    @Column(unique=true)
     private String phone; // Phone numbers must be unique
 
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private Set<Reservation> reservations;
 
-    public Passenger(String firstname){
+    public Passenger(){
+    	
+    }
+    
+    public Passenger(String id){
+    	this.id = id;
+    }
+    
+    public Passenger(String firstname,String lastname,String gender,int age, String phone){
         this.firstname = firstname;
+        this.lastname = lastname;
+        this.gender = gender;
+        this.phone = phone;
+        this.age = age;
     }
 
     //-----------setter getter-----------------

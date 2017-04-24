@@ -1,7 +1,11 @@
 package edu.sjsu.compe275.lab2;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
 /**
  * Created by Amruta on 4/15/2017.
  */
@@ -11,9 +15,9 @@ public class Plane {
     private int capacity;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column()
-    private String model;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+     private String model;
 
     private String manufacturer;
 

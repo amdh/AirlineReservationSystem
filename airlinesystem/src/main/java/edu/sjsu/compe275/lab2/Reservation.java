@@ -2,6 +2,9 @@ package edu.sjsu.compe275.lab2;
 
 import java.util.*;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Set;
 /**
  * Created by Amruta on 4/15/2017.
@@ -11,8 +14,8 @@ import java.util.Set;
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String orderNumber;
 
     @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)

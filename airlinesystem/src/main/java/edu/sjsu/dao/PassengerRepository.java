@@ -12,7 +12,11 @@ import java.util.List;
  */
 
 
-public interface PassengerRepository extends CrudRepository<Passenger, Integer> {
+public interface PassengerRepository extends CrudRepository<Passenger, String> {
 
     List<Passenger> findByFirstname(String firstname);
+    
+    Passenger findById(String id);
+
+	void delete(String id);
 }
