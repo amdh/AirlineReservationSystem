@@ -58,6 +58,29 @@ public class Flight {
     	this.number = number;
     }
 
+    
+    public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime){
+    	this.arrivalTime = aTime;
+    	this.departureTime = dTime;
+    	this.from = from;
+    	this.to = to;
+    	this.price = price;
+    	this.seatsLeft = seatsLeft;
+    	this.description = description;
+    	
+    }
+    
+    public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime, Plane p, Set<Passenger> pList){
+    	this.arrivalTime = aTime;
+    	this.departureTime = dTime;
+    	this.from = from;
+    	this.to = to;
+    	this.price = price;
+    	this.seatsLeft = seatsLeft;
+    	this.description = description;
+    	this.plane = p;
+    	this.passengers = pList;
+    }
     //---------------setter getter
 
     public String getNumber() {
