@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.sjsu.compe275.lab2.Passenger;
-import edu.sjsu.dao.PassengerRepository;
+import edu.sjsu.compe275.lab2.Flight;
+import edu.sjsu.dao.FlightRepository;
 import javassist.tools.web.BadHttpRequest;
 
 /**
@@ -30,20 +30,20 @@ import javassist.tools.web.BadHttpRequest;
  */
 @RestController
 @EnableAutoConfiguration
-public class FlightController {
+public class FlightController {/*
 
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
     public static final Logger logger = LoggerFactory.getLogger(FlightController.class);
 
     @Autowired
-    PassengerRepository passengerRepository;
+    FlightRepository flightRepository;
 
     //---------------get a passenger ------------------------------------
 
     @RequestMapping(value = "/passenger/{id}?xml=true", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
-    public Passenger getPassengerXML(@PathVariable("id") String id) {
-        Passenger p = passengerRepository.findById(id);
+    public Flight getFlightXML(@PathVariable("id") String id) {
+        Flight p = flightRepository.findOne(id);
 
         return p;
 
@@ -51,8 +51,8 @@ public class FlightController {
     }
 
     @RequestMapping(value = "/passenger/{id}?json=true", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
-    public Passenger getPassengerJSON(@PathVariable("id") String id) {
-        Passenger p = passengerRepository.findById(id);
+    public Flight getFlightJSON(@PathVariable("id") String id) {
+        Flight p = flightRepository.findOne(id);
 
         return p;
     }
@@ -61,17 +61,17 @@ public class FlightController {
 
     @RequestMapping(value = "/passenger",  method = RequestMethod.POST,  produces ={MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Passenger> createPassenger(@RequestParam(value="firstname", required=true) String firstname,@RequestParam(value="lastname", required=true) String lastname,
+    public ResponseEntity<Flight> createFlight(@RequestParam(value="firstname", required=true) String firstname,@RequestParam(value="lastname", required=true) String lastname,
     		@RequestParam(value="age", required=true) int age,@RequestParam(value="gender", required=true) String gender,@RequestParam(value="phone", required=true) String phone) {
         logger.info("Creating passenger : {}", firstname);
-        Passenger passenger;
+        Flight passenger;
         try{
-        	passenger = passengerRepository.save(new Passenger(firstname, lastname, gender, age, phone));
+        	passenger = flightRepository.save(new Flight(firstname, lastname, gender, age, phone));
         }catch (Exception ex) {
         	 String errorCode = "400 - Bad Request";
              String errorMsg = "Requested URL doesn't exist";
 
-             return new ResponseEntity<Passenger>(HttpStatus.BAD_REQUEST);
+             return new ResponseEntity<Flight>(HttpStatus.BAD_REQUEST);
         
         }
         return ResponseEntity.ok(passenger);
@@ -80,14 +80,14 @@ public class FlightController {
     // ------------------- Update a User ------------------------------------------------
 
     @RequestMapping(value = "/passenger/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Passenger> updatePassenger(@PathVariable("id") String id , @RequestParam(value="firstname", required=true) String firstname,@RequestParam(value="lastname", required=true) String lastname,
+    public ResponseEntity<Flight> updateFlight(@PathVariable("id") String id , @RequestParam(value="firstname", required=true) String firstname,@RequestParam(value="lastname", required=true) String lastname,
     		@RequestParam(value="age", required=true) int age,@RequestParam(value="gender", required=true) String gender,@RequestParam(value="phone", required=true) String phone) {
         logger.info("Updating passenger with id {}", id);
 
-        Passenger p = passengerRepository.findById(id);
+        Flight p = flightRepository.findById(id);
         if(p == null){
-        	 logger.error("Unable to update. Passenger with id {} not found.", id);
-        	 return new ResponseEntity<Passenger>(HttpStatus.NOT_FOUND);
+        	 logger.error("Unable to update. Flight with id {} not found.", id);
+        	 return new ResponseEntity<Flight>(HttpStatus.NOT_FOUND);
         }
         
         p.setAge(age);
@@ -96,9 +96,9 @@ public class FlightController {
         p.setLastname(lastname);
         p.setPhone(phone);
         
-        p = passengerRepository.save(p);
+        p = flightRepository.save(p);
         return ResponseEntity.ok(p);
-        /*User currentUser = userService.findById(id);
+        User currentUser = userService.findById(id);
          * 
 
         if (currentUser == null) {
@@ -112,39 +112,39 @@ public class FlightController {
         currentUser.setSalary(user.getSalary());
 
         userService.updateUser(currentUser);
-        return new ResponseEntity<User>(currentUser, HttpStatus.OK);*/
+        return new ResponseEntity<User>(currentUser, HttpStatus.OK);
     }
 
     // ------------------- Delete a passenger-----------------------------------------
 
     @RequestMapping(value = "/passenger/{id}", method = RequestMethod.DELETE,  produces ={MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public ResponseEntity<Object> deletePassenger(@PathVariable("id") String id) {
+    public ResponseEntity<Object> deleteFlight(@PathVariable("id") String id) {
         logger.info("Fetching & Deleting passenger with id {}", id);
 
-        Passenger p = passengerRepository.findById(id);
+        Flight p = flightRepository.findById(id);
         if(p == null){
-        	 logger.error("Unable to update. Passenger with id {} not found.", id);
+        	 logger.error("Unable to update. Flight with id {} not found.", id);
         	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
-        passengerRepository.delete(id);
+        flightRepository.delete(id);
         
         return (ResponseEntity<Object>) ResponseEntity.ok();
-       /* User user = userService.findById(id);
+        User user = userService.findById(id);
         if (user == null) {
             logger.error("Unable to delete. User with id {} not found.", id);
             return new ResponseEntity(new CustomErrorType("Unable to delete. User with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
         userService.deleteUserById(id);
-        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);*/
+        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
     
-   /* @ExceptionHandler(value = BadHttpRequest.class)  
+    @ExceptionHandler(value = BadHttpRequest.class)  
     public String badRequestHandler(BadHttpRequest e){  
         return e.getMessage();  
-    } */
+    } 
     
     @ExceptionHandler(BadHttpRequest.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -156,4 +156,4 @@ public class FlightController {
         map.put("msg", "Not found");
         return map;
     }
-}
+*/}
