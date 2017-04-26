@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,20 +42,22 @@ public class PassengerController {
 
     //---------------get a passenger ------------------------------------
 
-    @RequestMapping(value = "/passenger/{id}?xml=true", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
-    public Passenger getPassengerXML(@PathVariable("id") String id) {
+    @RequestMapping(params = "xml", value = "/passenger/{id}", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
+    public  ResponseEntity<?> getPassengerXML(@PathVariable("id") String id, @RequestParam boolean xml) {
         Passenger p = passengerRepository.findById(id);
 
-        return p;
+        return ResponseEntity.ok(p);
 
      //   return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value = "/passenger/{id}?json=true", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
-    public Passenger getPassengerJSON(@PathVariable("id") String id) {
+    @RequestMapping(params = "json", value = "/passenger/{id}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getPassengerJSON(@PathVariable("id") String id, @RequestParam boolean json) {
         Passenger p = passengerRepository.findById(id);
-
-        return p;
+   //     return new ResponseEntity<>(p, HttpStatus.OK);
+   //     return p;
+        
+        return ResponseEntity.ok(p);
     }
 
     // -------------------Create a passenger-------------------------------------------
