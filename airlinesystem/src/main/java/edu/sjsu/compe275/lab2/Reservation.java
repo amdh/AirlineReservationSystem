@@ -19,7 +19,7 @@ public class Reservation {
     private String orderNumber;
 
     @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name = "passenger_id")
+    @JoinColumn(name = "id")
     private Passenger passenger;
 
     private int price; // sum of each flight’s price.

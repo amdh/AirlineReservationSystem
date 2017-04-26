@@ -45,13 +45,20 @@ public class ReservationController {
 
     //---------------get a reservation ------------------------------------
 
-  
+//    @RequestMapping(params = "json", value = "/passenger/{order_number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
+//    public ResponseEntity<?> getPassengerJSON(@PathVariable("id") String id, @RequestParam boolean json) {
+//        Passenger p = passengerRepository.findById(id);
+   //     return new ResponseEntity<>(p, HttpStatus.OK);
+   //     return p;
+        
+//        return ResponseEntity.ok(p);
+//    }
 
-    @RequestMapping(value = "/reservation/{id}?json=true", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
-    public Reservation getReservationJSON(@PathVariable("id") String id) {
-        Reservation p = resRepository.findOne(id);
+    @RequestMapping(value = "/reservation/{order_number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getReservationJSON(@PathVariable("order_number") String order_number) {
+        Reservation p = resRepository.findOne(order_number);
 
-        return p;
+        return ResponseEntity.ok(p);
     }
 
     // -------------------Create a reservation-------------------------------------------

@@ -53,6 +53,10 @@ public class Flight {
 
     @Transient
     private Set<Passenger> passengers;
+    
+    public Flight(){
+    	
+    }
 
     public Flight(String number){
     	this.number = number;
