@@ -1,6 +1,7 @@
 package edu.sjsu.compe275.lab2;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,14 +10,12 @@ import org.hibernate.annotations.GenericGenerator;
 /**
  * Created by Amruta on 4/15/2017.
  */
-@Entity
+@Embeddable
 public class Plane {
 
     private int capacity;
 
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+
      private String model;
 
     private String manufacturer;
