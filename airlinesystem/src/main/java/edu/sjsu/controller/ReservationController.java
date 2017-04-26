@@ -39,7 +39,8 @@ public class ReservationController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
     public static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
-
+    Response rm = new Response();
+    
     @Autowired
    ReservationRepository resRepository;
 
@@ -126,26 +127,30 @@ public class ReservationController {
 
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE,  produces ={MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public ResponseEntity<Object> deleteReservation(@PathVariable("id") String id) {
-        logger.info("Fetching & Deleting reservation with id {}", id);
+    public ResponseEntity<?> deleteReservation(@PathVariable("id") String id) {
+    	
+    	 logger.info("Fetching & Deleting reservation with number {}", id);
 
-        Reservation p = resRepository.findOne(id);
-        if(p == null){
-        	 logger.error("Unable to update. Reservation with id {} not found.", id);
-        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        
-        resRepository.delete(id);
-        
-        return (ResponseEntity<Object>) ResponseEntity.ok();
-       /* User user = userService.findById(id);
-        if (user == null) {
-            logger.error("Unable to delete. User with id {} not found.", id);
-            return new ResponseEntity(new CustomErrorType("Unable to delete. User with id " + id + " not found."),
-                    HttpStatus.NOT_FOUND);
-        }
-        userService.deleteUserById(id);
-        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);*/
+    	 Reservation p = resRepository.findOne(id);
+         if(p == null){
+         	 logger.error("Unable to delete reservation with id {} not found.", id);
+         	 String num = "200";
+         	 rm.setCode(num);
+         	 rm.setMsg("Reservation with Number " + id + " is deleted successfully");
+         	 return ResponseEntity.ok(rm);
+         	 //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//         	 rm.setCode(Integer.toString(200));
+//          	 rm.setMsg(number);
+//          	 flightRepository.delete(number);
+//          	 return ResponseEntity.ok(rm);
+         }else{
+         	String numb = "200";
+         	rm.setCode(numb);
+        	rm.setMsg("Reservation with Number " + id + " is deleted successfully");
+        	resRepository.delete(id);
+         	return ResponseEntity.ok(rm);
+         }  
+    	
     }
     
    /* @ExceptionHandler(value = BadHttpRequest.class)  
