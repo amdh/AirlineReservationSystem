@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.sjsu.compe275.lab2.Flight;
 import edu.sjsu.compe275.lab2.Passenger;
 import edu.sjsu.dao.PassengerRepository;
 import javassist.tools.web.BadHttpRequest;
@@ -36,6 +37,7 @@ public class PassengerController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
     public static final Logger logger = LoggerFactory.getLogger(PassengerController.class);
+    Response rm = new Response();
 
     @Autowired
     PassengerRepository passengerRepository;
@@ -122,26 +124,40 @@ public class PassengerController {
 
     @RequestMapping(value = "/passenger/{id}", method = RequestMethod.DELETE,  produces ={MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public ResponseEntity<Object> deletePassenger(@PathVariable("id") String id) {
-        logger.info("Fetching & Deleting passenger with id {}", id);
+    public ResponseEntity<?> deletePassenger(@PathVariable("id") String id) {
+        logger.info("Fetching & Deleting flight with number {}", id);
 
         Passenger p = passengerRepository.findById(id);
         if(p == null){
         	 logger.error("Unable to update. Passenger with id {} not found.", id);
-        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        
-        passengerRepository.delete(id);
-        
-        return (ResponseEntity<Object>) ResponseEntity.ok();
-       /* User user = userService.findById(id);
-        if (user == null) {
-            logger.error("Unable to delete. User with id {} not found.", id);
-            return new ResponseEntity(new CustomErrorType("Unable to delete. User with id " + id + " not found."),
-                    HttpStatus.NOT_FOUND);
-        }
-        userService.deleteUserById(id);
-        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);*/
+        	 String num = "200";
+        	 rm.setCode(num);
+        	 rm.setMsg("Passenger with Number " + id + " is deleted successfully");
+        	 return ResponseEntity.ok(rm);
+        	 //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        	 rm.setCode(Integer.toString(200));
+//         	 rm.setMsg(number);
+//         	 flightRepository.delete(number);
+//         	 return ResponseEntity.ok(rm);
+        }else{
+        	String numb = "200";
+        	rm.setCode(numb);
+       	    rm.setMsg("Passenger with Number " + id + " is deleted successfully");
+        	passengerRepository.delete(id);
+        	return ResponseEntity.ok(rm);
+        }        
+    
+//        logger.info("Fetching & Deleting passenger with id {}", id);
+//
+//        Passenger p = passengerRepository.findById(id);
+//        if(p == null){
+//        	 logger.error("Unable to update. Passenger with id {} not found.", id);
+//        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        
+//        passengerRepository.delete(id);
+//        
+//        return (ResponseEntity<Object>) ResponseEntity.ok();
     }
     
    /* @ExceptionHandler(value = BadHttpRequest.class)  

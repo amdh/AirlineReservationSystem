@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,8 @@ public class FlightController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
     public static final Logger logger = LoggerFactory.getLogger(FlightController.class);
+    Response rm = new Response();
+    HttpHeaders httpHeaders = new HttpHeaders();
 
     @Autowired
     FlightRepository flightRepository;
@@ -58,25 +61,34 @@ public class FlightController {
         
         return ResponseEntity.ok(f);
     }
+    
+    // ------------------- Delete a flight-----------------------------------------
 
-//    //---------------get a passenger ------------------------------------
-//
-//    @RequestMapping(value = "/passenger/{id}?xml=true", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
-//    public Flight getFlightXML(@PathVariable("id") String id) {
-//        Flight p = flightRepository.findOne(id);
-//
-//        return p;
-//
-//     //   return new ResponseEntity(HttpStatus.NOT_FOUND);
-//    }
-//
-//    @RequestMapping(value = "/passenger/{id}?json=true", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
-//    public Flight getFlightJSON(@PathVariable("id") String id) {
-//        Flight p = flightRepository.findOne(id);
-//
-//        return p;
-//    }
-//
+    @RequestMapping(value = "/airline/{number}", method = RequestMethod.DELETE,  produces = { MediaType.APPLICATION_XML_VALUE } )
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public ResponseEntity<?> deleteFlight(@PathVariable("number") String number) {
+        logger.info("Fetching & Deleting flight with number {}", number);
+
+        Flight f = flightRepository.findOne(number);
+        if(f == null){
+        	 logger.error("Unable to update. Passenger with number {} not found.", number);
+        	 String num = "200";
+        	 rm.setCode(num);
+        	 rm.setMsg("Flight with Number " + number + " is deleted successfully");
+        	 return ResponseEntity.ok(rm);
+        	 //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        	 rm.setCode(Integer.toString(200));
+//         	 rm.setMsg(number);
+//         	 flightRepository.delete(number);
+//         	 return ResponseEntity.ok(rm);
+        }else{
+        	String numb = "200";
+        	rm.setCode(numb);
+       	    rm.setMsg("Flight with Number " + number + " is deleted successfully");
+        	flightRepository.delete(number);
+        	return ResponseEntity.ok(rm);
+        }        
+    }
 //    // -------------------Create a passenger-------------------------------------------
 //
 //    @RequestMapping(value = "/passenger",  method = RequestMethod.POST,  produces ={MediaType.APPLICATION_JSON_VALUE})
