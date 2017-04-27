@@ -2,19 +2,21 @@ package edu.sjsu.compe275.lab2;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Amruta on 4/15/2017.
@@ -50,9 +52,8 @@ public class Flight {
    @Embedded
     private Plane plane;  // Embedded
 
-
-    @Transient
-    private Set<Passenger> passengers;
+   @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private List<Passenger> passengers;
     
     public Flight(){
     	
@@ -74,7 +75,7 @@ public class Flight {
     	
     }
     
-    public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime, Plane p, Set<Passenger> pList){
+    public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime, Plane p, List<Passenger> pList){
     	this.arrivalTime = aTime;
     	this.departureTime = dTime;
     	this.from = from;
@@ -159,11 +160,12 @@ public class Flight {
         this.plane = plane;
     }
 
-    public Set<Passenger> getPassengers() {
+  
+    public List<Passenger> getPassengers() {
         return passengers;
     }
 
-    public void setPassengers(Set<Passenger> passengers) {
+    public void setPassengers(List<Passenger> passengers) {
         this.passengers = passengers;
     }
 }
