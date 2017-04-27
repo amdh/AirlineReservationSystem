@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -53,6 +55,9 @@ public class Flight {
     private Plane plane;  // Embedded
 
    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+   @JoinTable(name="flight_passenger",
+   joinColumns= { @JoinColumn(name = "flightNumber", referencedColumnName ="number")},
+   inverseJoinColumns={@JoinColumn(name="passengerId" , referencedColumnName="id")})
     private List<Passenger> passengers;
     
     public Flight(){

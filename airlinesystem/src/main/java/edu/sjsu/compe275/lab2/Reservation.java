@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 /**
  * Created by Amruta on 4/15/2017.
  */
@@ -51,7 +51,7 @@ public class Reservation {
         this.orderNumber = orderNumber;
     }
 
-    @JsonIgnore
+    @JsonBackReference
     public Passenger getPassenger() {
         return passenger;
     }

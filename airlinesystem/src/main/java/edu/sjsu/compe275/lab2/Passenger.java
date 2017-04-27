@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /**
  * Created by Amruta on 4/15/2017.
  */
@@ -37,7 +39,8 @@ public class Passenger {
     @Column(unique=true)
     private String phone; // Phone numbers must be unique
 
-    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL,  fetch=FetchType.EAGER)
+    @JsonManagedReference
     private Set<Reservation> reservations;
 
     public Passenger(){
