@@ -3,7 +3,6 @@ package edu.sjsu.compe275.lab2;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +17,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Created by Amruta on 4/15/2017.
@@ -57,7 +56,7 @@ public class Flight {
    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
    @JoinTable(name="flight_passenger",
    joinColumns= { @JoinColumn(name = "flightNumber", referencedColumnName ="number")},
-   inverseJoinColumns={@JoinColumn(name="passengerId" , referencedColumnName="id")})
+   inverseJoinColumns={@JoinColumn(name="passengerId" , referencedColumnName="id")}) 
     private List<Passenger> passengers;
     
     public Flight(){
