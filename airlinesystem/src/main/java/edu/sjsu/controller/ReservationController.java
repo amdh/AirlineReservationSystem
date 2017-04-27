@@ -44,17 +44,6 @@ public class ReservationController {
     @Autowired
    ReservationRepository resRepository;
 
-    //---------------get a reservation ------------------------------------
-
-//    @RequestMapping(params = "json", value = "/passenger/{order_number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
-//    public ResponseEntity<?> getPassengerJSON(@PathVariable("id") String id, @RequestParam boolean json) {
-//        Passenger p = passengerRepository.findById(id);
-   //     return new ResponseEntity<>(p, HttpStatus.OK);
-   //     return p;
-        
-//        return ResponseEntity.ok(p);
-//    }
-
     @RequestMapping(value = "/reservation/{order_number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getReservationJSON(@PathVariable("order_number") String order_number) {
         Reservation p = resRepository.findOne(order_number);
@@ -106,21 +95,7 @@ public class ReservationController {
         
         r = resRepository.save(r);
         return ResponseEntity.ok(r);
-        /*User currentUser = userService.findById(id);
-         * 
-
-        if (currentUser == null) {
-            logger.error("Unable to update. User with id {} not found.", id);
-            return new ResponseEntity(new CustomErrorType("Unable to upate. User with id " + id + " not found."),
-                    HttpStatus.NOT_FOUND);
-        }
-
-        currentUser.setName(user.getName());
-        currentUser.setAge(user.getAge());
-        currentUser.setSalary(user.getSalary());
-
-        userService.updateUser(currentUser);
-        return new ResponseEntity<User>(currentUser, HttpStatus.OK);*/
+       
     }
 
     // ------------------- Delete a reservation-----------------------------------------
@@ -138,11 +113,7 @@ public class ReservationController {
          	 rm.setCode(num);
          	 rm.setMsg("Reservation with Number " + id + " is deleted successfully");
          	 return ResponseEntity.ok(rm);
-         	 //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//         	 rm.setCode(Integer.toString(200));
-//          	 rm.setMsg(number);
-//          	 flightRepository.delete(number);
-//          	 return ResponseEntity.ok(rm);
+         	
          }else{
          	String numb = "200";
          	rm.setCode(numb);
@@ -152,11 +123,6 @@ public class ReservationController {
          }  
     	
     }
-    
-   /* @ExceptionHandler(value = BadHttpRequest.class)  
-    public String badRequestHandler(BadHttpRequest e){  
-        return e.getMessage();  
-    } */
     
     @ExceptionHandler(BadHttpRequest.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

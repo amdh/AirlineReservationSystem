@@ -52,15 +52,11 @@ public class FlightController {
         Flight f = flightRepository.findOne(number);
 
         return ResponseEntity.ok(f);
-
-     //   return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(params = "json", value = "/flight/{number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getPassengerJSON(@PathVariable("number") String number, @RequestParam boolean json) {
         Flight f = flightRepository.findOne(number);
-   //     return new ResponseEntity<>(p, HttpStatus.OK);
-   //     return p;
         
         return ResponseEntity.ok(f);
     }
@@ -82,11 +78,6 @@ public class FlightController {
         	 rm.setCode(num);
         	 rm.setMsg("Flight with Number " + number + " is deleted successfully");
         	 return ResponseEntity.ok(model);
-        	 //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        	 rm.setCode(Integer.toString(200));
-//         	 rm.setMsg(number);
-//         	 flightRepository.delete(number);
-//         	 return ResponseEntity.ok(rm);
         }else{
         	String numb = "200";
         	rm.setCode(numb);
@@ -101,112 +92,13 @@ public class FlightController {
         	return ResponseEntity.ok(xml_test);
         }        
     }
-//    // -------------------Create a passenger-------------------------------------------
-//
-//    @RequestMapping(value = "/passenger",  method = RequestMethod.POST,  produces ={MediaType.APPLICATION_JSON_VALUE})
-//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-//    public ResponseEntity<Flight> createFlight(@RequestParam(value="firstname", required=true) String firstname,@RequestParam(value="lastname", required=true) String lastname,
-//    		@RequestParam(value="age", required=true) int age,@RequestParam(value="gender", required=true) String gender,@RequestParam(value="phone", required=true) String phone) {
-//        logger.info("Creating passenger : {}", firstname);
-//        Flight passenger;
-//        try{
-//        	passenger = flightRepository.save(new Flight(firstname, lastname, gender, age, phone));
-//        }catch (Exception ex) {
-//        	 String errorCode = "400 - Bad Request";
-//             String errorMsg = "Requested URL doesn't exist";
-//
-//             return new ResponseEntity<Flight>(HttpStatus.BAD_REQUEST);
-//        
-//        }
-//        return ResponseEntity.ok(passenger);
-//    }
-//
-//    // ------------------- Update a User ------------------------------------------------
-//
-//    @RequestMapping(value = "/passenger/{id}", method = RequestMethod.PUT)
-//    public ResponseEntity<Flight> updateFlight(@PathVariable("id") String id , @RequestParam(value="firstname", required=true) String firstname,@RequestParam(value="lastname", required=true) String lastname,
-//    		@RequestParam(value="age", required=true) int age,@RequestParam(value="gender", required=true) String gender,@RequestParam(value="phone", required=true) String phone) {
-//        logger.info("Updating passenger with id {}", id);
-//
-//        Flight p = flightRepository.findById(id);
-//        if(p == null){
-//        	 logger.error("Unable to update. Flight with id {} not found.", id);
-//        	 return new ResponseEntity<Flight>(HttpStatus.NOT_FOUND);
-//        }
-//        
-//        p.setAge(age);
-//        p.setFirstname(firstname);
-//        p.setGender(gender);
-//        p.setLastname(lastname);
-//        p.setPhone(phone);
-//        
-//        p = flightRepository.save(p);
-//        return ResponseEntity.ok(p);
-//        User currentUser = userService.findById(id);
-//         * 
-//
-//        if (currentUser == null) {
-//            logger.error("Unable to update. User with id {} not found.", id);
-//            return new ResponseEntity(new CustomErrorType("Unable to upate. User with id " + id + " not found."),
-//                    HttpStatus.NOT_FOUND);
-//        }
-//
-//        currentUser.setName(user.getName());
-//        currentUser.setAge(user.getAge());
-//        currentUser.setSalary(user.getSalary());
-//
-//        userService.updateUser(currentUser);
-//        return new ResponseEntity<User>(currentUser, HttpStatus.OK);
-//    }
-//
-//    // ------------------- Delete a passenger-----------------------------------------
-//
-//    @RequestMapping(value = "/passenger/{id}", method = RequestMethod.DELETE,  produces ={MediaType.APPLICATION_XML_VALUE})
-//    @ResponseStatus(value = HttpStatus.ACCEPTED)
-//    public ResponseEntity<Object> deleteFlight(@PathVariable("id") String id) {
-//        logger.info("Fetching & Deleting passenger with id {}", id);
-//
-//        Flight p = flightRepository.findById(id);
-//        if(p == null){
-//        	 logger.error("Unable to update. Flight with id {} not found.", id);
-//        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        
-//        flightRepository.delete(id);
-//        
-//        return (ResponseEntity<Object>) ResponseEntity.ok();
-//        User user = userService.findById(id);
-//        if (user == null) {
-//            logger.error("Unable to delete. User with id {} not found.", id);
-//            return new ResponseEntity(new CustomErrorType("Unable to delete. User with id " + id + " not found."),
-//                    HttpStatus.NOT_FOUND);
-//        }
-//        userService.deleteUserById(id);
-//        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
-//    }
-//    
-//    @ExceptionHandler(value = BadHttpRequest.class)  
-//    public String badRequestHandler(BadHttpRequest e){  
-//        return e.getMessage();  
-//    } 
-//    
-//    @ExceptionHandler(BadHttpRequest.class)
-//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-//    public Map<String, Object> handleUnsupportedMediaTypeException(
-//        HttpMediaTypeNotSupportedException ex) throws IOException {
-//        Map<String, Object> map =new HashMap();
-//        map.put("code", "404");
-//       // map.put("cause", ex.getLocalizedMessage());
-//        map.put("msg", "Not found");
-//        return map;
-    //}
+
     @ExceptionHandler(BadHttpRequest.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleUnsupportedMediaTypeException(
         HttpMediaTypeNotSupportedException ex) throws IOException {
         Map<String, Object> map =new HashMap();
         map.put("code", "404");
-       // map.put("cause", ex.getLocalizedMessage());
         map.put("msg", "Not found");
         return map;
     }

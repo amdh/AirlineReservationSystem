@@ -103,21 +103,7 @@ public class PassengerController {
         
         p = passengerRepository.save(p);
         return ResponseEntity.ok(p);
-        /*User currentUser = userService.findById(id);
-         * 
-
-        if (currentUser == null) {
-            logger.error("Unable to update. User with id {} not found.", id);
-            return new ResponseEntity(new CustomErrorType("Unable to upate. User with id " + id + " not found."),
-                    HttpStatus.NOT_FOUND);
-        }
-
-        currentUser.setName(user.getName());
-        currentUser.setAge(user.getAge());
-        currentUser.setSalary(user.getSalary());
-
-        userService.updateUser(currentUser);
-        return new ResponseEntity<User>(currentUser, HttpStatus.OK);*/
+    
     }
 
     // ------------------- Delete a passenger-----------------------------------------
@@ -134,11 +120,7 @@ public class PassengerController {
         	 rm.setCode(num);
         	 rm.setMsg("Passenger with Number " + id + " is deleted successfully");
         	 return ResponseEntity.ok(rm);
-        	 //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        	 rm.setCode(Integer.toString(200));
-//         	 rm.setMsg(number);
-//         	 flightRepository.delete(number);
-//         	 return ResponseEntity.ok(rm);
+        	 
         }else{
         	String numb = "200";
         	rm.setCode(numb);
@@ -147,23 +129,7 @@ public class PassengerController {
         	return ResponseEntity.ok(rm);
         }        
     
-//        logger.info("Fetching & Deleting passenger with id {}", id);
-//
-//        Passenger p = passengerRepository.findById(id);
-//        if(p == null){
-//        	 logger.error("Unable to update. Passenger with id {} not found.", id);
-//        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        
-//        passengerRepository.delete(id);
-//        
-//        return (ResponseEntity<Object>) ResponseEntity.ok();
     }
-    
-   /* @ExceptionHandler(value = BadHttpRequest.class)  
-    public String badRequestHandler(BadHttpRequest e){  
-        return e.getMessage();  
-    } */
     
     @ExceptionHandler(BadHttpRequest.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
