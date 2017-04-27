@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-
+import org.springframework.ui.ModelMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import edu.sjsu.compe275.lab2.Flight;
 import edu.sjsu.compe275.lab2.Passenger;
 import edu.sjsu.compe275.lab2.Reservation;
@@ -39,8 +41,9 @@ public class FlightController {
     private final AtomicLong counter = new AtomicLong();
     public static final Logger logger = LoggerFactory.getLogger(FlightController.class);
     Response rm = new Response();
-    HttpHeaders httpHeaders = new HttpHeaders();
-
+    ModelMap model = new ModelMap();
+    ModelMap model2 = new ModelMap();
+    
     @Autowired
     FlightRepository flightRepository;
     
@@ -64,18 +67,21 @@ public class FlightController {
     
     // ------------------- Delete a flight-----------------------------------------
 
-    @RequestMapping(value = "/airline/{number}", method = RequestMethod.DELETE,  produces = { MediaType.APPLICATION_XML_VALUE } )
+    @RequestMapping(value = "/airline/{number}", method = RequestMethod.DELETE/*,  produces = {MediaType.APPLICATION_XML_VALUE}*/)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public ResponseEntity<?> deleteFlight(@PathVariable("number") String number) {
+    public ResponseEntity<?> deleteFlight(@PathVariable("number") String number) throws JSONException {
         logger.info("Fetching & Deleting flight with number {}", number);
 
         Flight f = flightRepository.findOne(number);
         if(f == null){
         	 logger.error("Unable to update. Passenger with number {} not found.", number);
+        	 model.addAttribute("BadRequest", model2);   
+        	 model2.addAttribute("code", "404");
+        	 model2.addAttribute("msg",number);
         	 String num = "200";
         	 rm.setCode(num);
         	 rm.setMsg("Flight with Number " + number + " is deleted successfully");
-        	 return ResponseEntity.ok(rm);
+        	 return ResponseEntity.ok(model);
         	 //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //        	 rm.setCode(Integer.toString(200));
 //         	 rm.setMsg(number);
@@ -85,8 +91,14 @@ public class FlightController {
         	String numb = "200";
         	rm.setCode(numb);
        	    rm.setMsg("Flight with Number " + number + " is deleted successfully");
+       	    model.addAttribute("BadRequest", model2);   
+    	    model2.addAttribute("code", "200");
+    	    String st = "Flight with Number " + number + " is deleted successfully";
+    	    model2.addAttribute("msg",st);
+       	    JSONObject json_test = new JSONObject(model);
+       	    String xml_test = XML.toString(json_test);
         	flightRepository.delete(number);
-        	return ResponseEntity.ok(rm);
+        	return ResponseEntity.ok(xml_test);
         }        
     }
 //    // -------------------Create a passenger-------------------------------------------
