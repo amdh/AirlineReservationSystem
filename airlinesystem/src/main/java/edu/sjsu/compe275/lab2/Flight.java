@@ -53,7 +53,7 @@ public class Flight {
    @Embedded
     private Plane plane;  // Embedded
 
-   @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+   @OneToMany(fetch=FetchType.EAGER)
    @JoinTable(name="flight_passenger",
    joinColumns= { @JoinColumn(name = "flightNumber", referencedColumnName ="number")},
    inverseJoinColumns={@JoinColumn(name="passengerId" , referencedColumnName="id")}) 

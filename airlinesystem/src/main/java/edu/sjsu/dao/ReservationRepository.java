@@ -1,13 +1,11 @@
 package edu.sjsu.dao;
 
-import edu.sjsu.compe275.lab2.Passenger;
-import edu.sjsu.compe275.lab2.Reservation;
-
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
+import edu.sjsu.compe275.lab2.Reservation;
 
 /**
  * Created by Amruta on 4/17/2017.
@@ -16,5 +14,7 @@ import java.util.List;
 
 public interface ReservationRepository extends CrudRepository<Reservation, String> {
 
-  
+//	@Query("")
+//	List<Reservation> findByPassengerIDFromToFlightNo(String passengerId , String from_source , String to_source , String flightNumber);
+//  
 }

@@ -15,4 +15,5 @@ import edu.sjsu.compe275.lab2.Passenger;
 public interface FlightRepository extends CrudRepository<Flight, String> {
 
 	//void updateBySeatsLeft(String number, int seatsLeft);
+	
 }
