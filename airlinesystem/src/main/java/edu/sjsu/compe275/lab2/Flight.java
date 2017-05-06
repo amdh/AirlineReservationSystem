@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -68,15 +69,20 @@ public class Flight {
     }
 
     
-    public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime){
+    public Flight(String from , String to , int price , int capacity , String description, Date aTime , Date  dTime, String manufacturer, String model, int yearsofM ){
     	this.arrivalTime = aTime;
     	this.departureTime = dTime;
     	this.from = from;
     	this.to = to;
     	this.price = price;
-    	this.seatsLeft = seatsLeft;
+    	this.seatsLeft = capacity;
     	this.description = description;
-    	
+    	this.plane = new Plane();
+    	this.plane.setModel(model);
+    	this.plane.setCapacity(capacity);
+    	this.plane.setManufacturer(manufacturer);
+    	this.plane.setModel(model);
+        	
     }
     
     public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime, Plane p, List<Passenger> pList){
@@ -90,7 +96,7 @@ public class Flight {
     	this.plane = p;
     	this.passengers = pList;
     }
-    //---------------setter getter
+    //---------------setter getter----------------
 
     public String getNumber() {
         return number;
@@ -164,7 +170,7 @@ public class Flight {
         this.plane = plane;
     }
 
-  
+  @JsonIgnore
     public List<Passenger> getPassengers() {
         return passengers;
     }

@@ -41,7 +41,6 @@ public class Reservation {
     joinColumns= { @JoinColumn(name = "orderNumber", referencedColumnName ="orderNumber")},
     inverseJoinColumns={@JoinColumn(name="flightNumber" , referencedColumnName="number")})
     @ManyToMany
-    @JsonIgnore
     private List<Flight> flights;
 
     

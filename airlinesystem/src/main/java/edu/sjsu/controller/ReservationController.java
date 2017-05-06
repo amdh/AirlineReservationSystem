@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.compe275.lab2.Flight;
 import edu.sjsu.compe275.lab2.Passenger;
 import edu.sjsu.compe275.lab2.Reservation;
+import edu.sjsu.dao.FlightRepository;
 import edu.sjsu.dao.ReservationRepository;
 import javassist.tools.web.BadHttpRequest;
 
@@ -43,6 +44,9 @@ public class ReservationController {
     
     @Autowired
    ReservationRepository resRepository;
+    
+    @Autowired
+   FlightRepository fRepository;
 
     @RequestMapping(value = "/reservation/{order_number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getReservationJSON(@PathVariable("order_number") String order_number) {
@@ -51,7 +55,7 @@ public class ReservationController {
         return ResponseEntity.ok(p);
     }
 
-    @RequestMapping(value = "/reservation?", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/reservation?", method = RequestMethod.GET, produces ={MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getReservation(@RequestParam(value="passengerId", required=true) String passengerId,
     		@RequestParam(value="from", required=true) String from_source,
     		@RequestParam(value="to", required=true) String to_dest,
@@ -61,6 +65,10 @@ public class ReservationController {
 
         return ResponseEntity.ok(p);
     }
+    //https://hostname/reservation ?passengerId=XX&from=YY&to=ZZ&flightNumber=123
+    
+ 
+    
     // -------------------Create a reservation-------------------------------------------
 
     @RequestMapping(value = "/reservation /number",  method = RequestMethod.POST,  produces ={MediaType.APPLICATION_JSON_VALUE})
@@ -125,11 +133,24 @@ public class ReservationController {
          	 return ResponseEntity.ok(rm);
          	
          }else{
-         	String numb = "200";
+        	 List<Flight> f_list = p.getFlights();
+        	 for(Flight f:f_list){
+        		 int cnt  = f.getSeatsLeft();
+        		 if(cnt > 0)
+        			 f.setSeatsLeft(++cnt);
+        		 	fRepository.save(f);
+        	 }
+        	String numb = "200";
          	rm.setCode(numb);
         	rm.setMsg("Reservation with Number " + id + " is deleted successfully");
+        	try{
         	resRepository.delete(id);
          	return ResponseEntity.ok(rm);
+        	}catch(Exception e){
+        		 rm.setCode("404");
+             	 rm.setMsg("Reservation with Number " + id + " deletion faced some error");
+             	 return ResponseEntity.ok(rm);
+        	}
          }  
     	
     }

@@ -1,8 +1,5 @@
 package edu.sjsu.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -12,20 +9,16 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.sjsu.compe275.lab2.Flight;
 import edu.sjsu.compe275.lab2.Passenger;
+import edu.sjsu.dao.FlightRepository;
 import edu.sjsu.dao.PassengerRepository;
-import javassist.tools.web.BadHttpRequest;
 
 /**
  * Created by Amruta on 4/15/2017.
@@ -41,13 +34,16 @@ public class PassengerController {
 
     @Autowired
     PassengerRepository passengerRepository;
+    
+    @Autowired
+    FlightRepository flightRepository;
 
     //---------------get a passenger ------------------------------------
 
     @RequestMapping(params = "xml", value = "/passenger/{id}", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
     public  ResponseEntity<?> getPassengerXML(@PathVariable("id") String id, @RequestParam boolean xml) {
         Passenger p = passengerRepository.findById(id);
-
+        
         return ResponseEntity.ok(p);
 
      //   return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -126,6 +122,7 @@ public class PassengerController {
         	rm.setCode(numb);
        	    rm.setMsg("Passenger with Number " + id + " is deleted successfully");
         	passengerRepository.delete(id);
+        	
         	return ResponseEntity.ok(rm);
         }        
     
