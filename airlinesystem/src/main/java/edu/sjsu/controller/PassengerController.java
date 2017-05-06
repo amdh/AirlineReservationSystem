@@ -191,15 +191,4 @@ public class PassengerController {
 //        }        
     
     }
-    
-    @ExceptionHandler(BadHttpRequest.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleUnsupportedMediaTypeException(
-        HttpMediaTypeNotSupportedException ex) throws IOException {
-        Map<String, Object> map =new HashMap();
-        map.put("code", "404");
-       // map.put("cause", ex.getLocalizedMessage());
-        map.put("msg", "Not found");
-        return map;
-    }
 }

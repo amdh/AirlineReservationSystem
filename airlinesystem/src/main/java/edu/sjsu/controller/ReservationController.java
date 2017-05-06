@@ -74,6 +74,16 @@ public class ReservationController {
           }
     }
 
+    @RequestMapping(value = "/reservation?", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getReservation(@RequestParam(value="passengerId", required=true) String passengerId,
+    		@RequestParam(value="from", required=true) String from_source,
+    		@RequestParam(value="to", required=true) String to_dest,
+    		@RequestParam(value="flightNo", required=true) String flightNo) {
+    	
+        Reservation p = resRepository.findOne(passengerId);
+
+        return ResponseEntity.ok(p);
+    }
     // -------------------Create a reservation-------------------------------------------
 
     @RequestMapping(value = "/reservation /number",  method = RequestMethod.POST,  produces ={MediaType.APPLICATION_JSON_VALUE})
