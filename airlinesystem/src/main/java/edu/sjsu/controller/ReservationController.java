@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +62,7 @@ public class ReservationController {
     public ResponseEntity<?> getReservation(@RequestParam(value="passengerId", required=true) String passengerId,
     		@RequestParam(value="from", required=true) String from_source,
     		@RequestParam(value="to", required=true) String to_dest,
-    		@RequestParam(value="flightNo", required=true) String flightNo) {
+    		@RequestParam(value="flightNumber", required=true) String flightNo) {
     	
         Reservation p = resRepository.findOne(passengerId);
 

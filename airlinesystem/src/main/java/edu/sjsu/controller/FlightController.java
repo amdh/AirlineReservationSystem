@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
-import org.omg.IOP.RMICustomMaxStreamFormat;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.monitorjbl.json.JsonView;
 import com.monitorjbl.json.JsonViewModule;
 
@@ -61,10 +62,26 @@ public class FlightController {
     ObjectMapper mapper = new ObjectMapper().registerModule(new JsonViewModule());
     
     @RequestMapping(params = "xml", value = "/flight/{number}", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
-    public  ResponseEntity<?> getFlightXML(@PathVariable("number") String number, @RequestParam boolean xml) {
-        Flight f = flightRepository.findOne(number);
-
-        return ResponseEntity.ok(f);
+    public  ResponseEntity<?> getFlightXML(@PathVariable("number") String number, @RequestParam boolean xml) throws JSONException {
+    	  Flight p = flightRepository.findOne(number);
+          if(p == null){
+           	 logger.error("Unable to update. Passenger with id {} not found.", number);
+           	// String num = "404";
+//            rm.setCode(num);
+//           	 rm.setMsg("Passenger with Number " + id + " does not exist");
+           	 model.addAttribute("BadRequest", model2);   
+        	 model2.addAttribute("code", "404");
+        	String st = "Passenger with Number " + number + " does not exist";
+     	    model2.addAttribute("msg",st);
+     	    
+           	 return ResponseEntity.ok(model);
+           	 
+           }else{
+         	  model.addAttribute("Pasenger", p);
+         	  JSONObject json_test = new JSONObject(model);
+          	  String xml_test = XML.toString(json_test);
+        	   return ResponseEntity.ok(xml_test);
+           }
     }
 
     @RequestMapping(params = "json", value = "/flight/{number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
