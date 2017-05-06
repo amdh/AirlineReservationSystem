@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import org.springframework.ui.ModelMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
@@ -12,10 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +24,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
+import com.monitorjbl.json.JsonView;
+import com.monitorjbl.json.JsonViewModule;
+
 import edu.sjsu.compe275.lab2.Flight;
-import edu.sjsu.compe275.lab2.Passenger;
-import edu.sjsu.compe275.lab2.Reservation;
 import edu.sjsu.dao.FlightRepository;
 import javassist.tools.web.BadHttpRequest;
+import static com.monitorjbl.json.Match.match;
 
 /**
  * Created by Amruta on 4/15/2017.
@@ -46,6 +52,8 @@ public class FlightController {
     
     @Autowired
     FlightRepository flightRepository;
+    
+    ObjectMapper mapper = new ObjectMapper().registerModule(new JsonViewModule());
     
     @RequestMapping(params = "xml", value = "/flight/{number}", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
     public  ResponseEntity<?> getPassengerXML(@PathVariable("number") String number, @RequestParam boolean xml) throws JSONException {
@@ -71,10 +79,10 @@ public class FlightController {
     }
 
     @RequestMapping(params = "json", value = "/flight/{number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getPassengerJSON(@PathVariable("number") String number, @RequestParam boolean json) {
+    public ResponseEntity<?> getPassengerJSON(@PathVariable("number") String number, @RequestParam boolean json) throws JsonProcessingException {
         Flight f = flightRepository.findOne(number);
-        
-        return ResponseEntity.ok(f);
+        String jsonF = mapper.writeValueAsString(JsonView.with(f).onClass(Flight.class, match().exclude("reservations")));
+        return ResponseEntity.ok(jsonF);
     }
     
     // ------------------- Delete a flight-----------------------------------------

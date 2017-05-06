@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-	
+
+
 	<groupId>edu.sjsu</groupId>
 	<artifactId>airlinesystem</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	
+
 	<name>airlinesystem Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -49,6 +49,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
+<<<<<<< HEAD
 			</dependency>
 			<dependency>
     			<groupId>org.json</groupId>
@@ -62,10 +63,26 @@
     <version>20160212</version>
 </dependency>
 	
+=======
+		</dependency>
+
+>>>>>>> 3136a5b5a9cd1ebf0ccab2a4c8bc5a8ad65240ca
+		<dependency>
+		    <groupId>com.monitorjbl</groupId>
+		    <artifactId>json-view</artifactId>
+		    <version>0.15</version>
+		</dependency>	
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160810</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
