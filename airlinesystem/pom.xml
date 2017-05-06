@@ -50,7 +50,18 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			</dependency>
-
+			<dependency>
+    			<groupId>org.json</groupId>
+			    <artifactId>json</artifactId>
+			    <version>20160212</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.json/json -->
+<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20160212</version>
+</dependency>
+	
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>

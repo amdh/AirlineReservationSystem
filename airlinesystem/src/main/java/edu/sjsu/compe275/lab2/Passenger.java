@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -39,9 +40,10 @@ public class Passenger {
     @Column(unique=true)
     private String phone; // Phone numbers must be unique
 
-    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL,  fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL,  fetch=FetchType.LAZY)
     @JsonManagedReference
-    private Set<Reservation> reservations;
+    @JsonIgnore
+     private Set<Reservation> reservations;
 
     public Passenger(){
     	

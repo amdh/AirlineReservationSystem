@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Created by Amruta on 4/15/2017.
  */
@@ -30,6 +31,7 @@ public class Reservation {
 
     @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinColumn(name = "id")
+    @JsonIgnore
     private Passenger passenger;
 
     private int price; // sum of each flight’s price.
@@ -39,6 +41,7 @@ public class Reservation {
     joinColumns= { @JoinColumn(name = "orderNumber", referencedColumnName ="orderNumber")},
     inverseJoinColumns={@JoinColumn(name="flightNumber" , referencedColumnName="number")})
     @ManyToMany
+    @JsonIgnore
     private List<Flight> flights;
 
     

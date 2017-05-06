@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,15 +44,34 @@ public class ReservationController {
     private final AtomicLong counter = new AtomicLong();
     public static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
     Response rm = new Response();
+    ModelMap model = new ModelMap();
+    ModelMap model2 = new ModelMap();
     
     @Autowired
    ReservationRepository resRepository;
 
-    @RequestMapping(value = "/reservation/{order_number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getReservationJSON(@PathVariable("order_number") String order_number) {
-        Reservation p = resRepository.findOne(order_number);
-
-        return ResponseEntity.ok(p);
+ // -------------------Get a reservation-----------------------------
+    
+    @RequestMapping(value = "/reservation/{order_number}", method = RequestMethod.GET/*, produces ={MediaType.APPLICATION_JSON_VALUE}*/)
+    public ResponseEntity<?> getReservationJSON(@PathVariable("order_number") String order_number) throws JSONException {
+    	
+    	Reservation p = resRepository.findOne(order_number);
+        if(p == null){
+          	 logger.error("Unable to update. Passenger with id {} not found.", order_number);
+       
+          	 model.addAttribute("BadRequest", model2);   
+          	 model2.addAttribute("code", "404");
+          	 String st = "Reservation with Number " + order_number + " does not exist";
+    	     model2.addAttribute("msg",st);
+    	    
+          	 return ResponseEntity.ok(model);
+          	 
+          }else{
+        	  model.addAttribute("reservation", p);
+        	  JSONObject json_test = new JSONObject(model);
+         	  String xml_test = XML.toString(json_test);
+       	      return ResponseEntity.ok(xml_test);
+          }
     }
 
     // -------------------Create a reservation-------------------------------------------

@@ -48,10 +48,26 @@ public class FlightController {
     FlightRepository flightRepository;
     
     @RequestMapping(params = "xml", value = "/flight/{number}", method = RequestMethod.GET,  produces={MediaType.APPLICATION_XML_VALUE})
-    public  ResponseEntity<?> getPassengerXML(@PathVariable("number") String number, @RequestParam boolean xml) {
-        Flight f = flightRepository.findOne(number);
-
-        return ResponseEntity.ok(f);
+    public  ResponseEntity<?> getPassengerXML(@PathVariable("number") String number, @RequestParam boolean xml) throws JSONException {
+        Flight p = flightRepository.findOne(number);
+        if(p == null){
+         	 logger.error("Unable to update. Passenger with id {} not found.", number);
+         	// String num = "404";
+//          rm.setCode(num);
+//         	 rm.setMsg("Passenger with Number " + id + " does not exist");
+         	 model.addAttribute("BadRequest", model2);   
+      	 model2.addAttribute("code", "404");
+      	String st = "Passenger with Number " + number + " does not exist";
+   	    model2.addAttribute("msg",st);
+   	    
+         	 return ResponseEntity.ok(model);
+         	 
+         }else{
+       	  model.addAttribute("Pasenger", p);
+       	  JSONObject json_test = new JSONObject(model);
+        	  String xml_test = XML.toString(json_test);
+      	   return ResponseEntity.ok(xml_test);
+         }
     }
 
     @RequestMapping(params = "json", value = "/flight/{number}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE})
