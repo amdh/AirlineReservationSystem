@@ -1,27 +1,21 @@
 package edu.sjsu.compe275.lab2;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
+
+import java.util.List;
 /**
  * Created by Amruta on 4/15/2017.
  */
 @Entity
 @Table(name = "reservation")
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "passanger"})
 public class Reservation {
 
     @Id
@@ -29,19 +23,19 @@ public class Reservation {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String orderNumber;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name = "id")
-    @JsonIgnore
-    private Passenger passenger;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "passenger_id")
+      private Passanger passanger;
 
     private int price; // sum of each flight’s price.
 
 
-    @JoinTable(name="flight_reservation",
-    joinColumns= { @JoinColumn(name = "orderNumber", referencedColumnName ="orderNumber")},
-    inverseJoinColumns={@JoinColumn(name="flightNumber" , referencedColumnName="number")})
     @ManyToMany
-    private List<Flight> flights;
+    @JoinTable(
+            name="reservation_flight",
+            joinColumns=@JoinColumn(name="reservation_id", referencedColumnName="orderNumber"),
+            inverseJoinColumns=@JoinColumn(name="flight_id", referencedColumnName="flight_number"))
+     private List<Flight> flights;
 
     
 
@@ -53,13 +47,13 @@ public class Reservation {
         this.orderNumber = orderNumber;
     }
 
-    @JsonBackReference
-    public Passenger getPassenger() {
-        return passenger;
+ 
+    public Passanger getPassenger() {
+        return passanger;
     }
 
-    public void setPassenger(Passenger passenger) {
-        this.passenger = passenger;
+    public void setPassenger(Passanger passenger) {
+        this.passanger = passenger;
     }
 
     public int getPrice() {
@@ -77,4 +71,33 @@ public class Reservation {
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
     }
+    
+    public JSONObject getFullJSON() throws JSONException
+    {
+        JSONObject result = new JSONObject();
+        JSONObject reserv=new JSONObject();
+        reserv.put("orderNumber",this.getOrderNumber());
+        reserv.put("price",this.getPrice());
+        JSONArray flights = new JSONArray();
+        for (Flight flight:this.getFlights())
+        {
+            flights.put(flight.getJSON());
+        }
+        reserv.put("flights",new JSONObject().put("flight",flights));
+        reserv.put("passenger",this.getPassenger().getJSON());
+        result.put("reservation",reserv);
+        return result;
+    }
+
+    /**
+     * XML representation of Reservation JSONObject
+     * @return String
+     * @throws JSONException 
+     */
+    public String getXML() throws JSONException
+    {
+        return XML.toString(getFullJSON());
+    }
+    
 }
+

@@ -1,12 +1,9 @@
 package edu.sjsu.compe275.lab2;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONException;
+import org.json.JSONObject;
 /**
  * Created by Amruta on 4/15/2017.
  */
@@ -52,5 +49,15 @@ public class Plane {
 
     public void setYearOfManufacture(int yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
+    }
+    
+    public JSONObject getJSON() throws JSONException
+    {
+        JSONObject plane=new JSONObject();
+        plane.put("capacity",this.getCapacity());
+        plane.put("model",this.getModel());
+        plane.put("manufacturer",this.getManufacturer());
+        plane.put("yearOfManufacture",this.getYearOfManufacture());
+        return plane;
     }
 }

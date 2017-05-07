@@ -1,24 +1,17 @@
 package edu.sjsu.compe275.lab2;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
+
+import javax.persistence.*;
 
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Created by Amruta on 4/15/2017.
@@ -27,8 +20,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Flight {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name="flight_number",unique = true)
     private String number; // Each flight has a unique flight number.
 
     private int price;
@@ -43,8 +35,10 @@ public class Flight {
     ** Example: 2017-03-22-19
     The system only needs to supports PST. You can ignore other time zones.*/
 
+  //  @JsonFormat(pattern="yyyy-MM-dd-HH")
     private Date departureTime;
 
+    //@JsonFormat(pattern="yyyy-MM-dd-HH")
     private Date arrivalTime;
 
     private int seatsLeft;
@@ -54,11 +48,16 @@ public class Flight {
    @Embedded
     private Plane plane;  // Embedded
 
-   @OneToMany(fetch=FetchType.EAGER)
+  
+   @ManyToMany
    @JoinTable(name="flight_passenger",
-   joinColumns= { @JoinColumn(name = "flightNumber", referencedColumnName ="number")},
-   inverseJoinColumns={@JoinColumn(name="passengerId" , referencedColumnName="id")}) 
-    private List<Passenger> passengers;
+   joinColumns= { @JoinColumn(name = "flight_umber", referencedColumnName ="flight_number")},
+   inverseJoinColumns={@JoinColumn(name="passenger_id" , referencedColumnName="passanger_id")}) 
+    private List<Passanger> passengers;
+  
+   @JsonIgnore
+   @ManyToMany(mappedBy="flights")
+   private List<Reservation> reservations;
     
     public Flight(){
     	
@@ -69,8 +68,9 @@ public class Flight {
     }
 
     
-    public Flight(String from , String to , int price , int capacity , String description, Date aTime , Date  dTime, String manufacturer, String model, int yearsofM ){
+    public Flight(String flightNumber,String from , String to , int price , int capacity , String description, Date aTime , Date  dTime, String manufacturer, String model, int yearsofM ){
     	this.arrivalTime = aTime;
+    	this.number = flightNumber;
     	this.departureTime = dTime;
     	this.from = from;
     	this.to = to;
@@ -81,11 +81,11 @@ public class Flight {
     	this.plane.setModel(model);
     	this.plane.setCapacity(capacity);
     	this.plane.setManufacturer(manufacturer);
-    	this.plane.setModel(model);
+    	this.plane.setYearOfManufacture(yearsofM);
         	
     }
     
-    public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime, Plane p, List<Passenger> pList){
+    public Flight(String from , String to , int price , int seatsLeft , String description, Date aTime , Date  dTime, Plane p, List<Passanger> pList){
     	this.arrivalTime = aTime;
     	this.departureTime = dTime;
     	this.from = from;
@@ -170,13 +170,66 @@ public class Flight {
         this.plane = plane;
     }
 
-  @JsonIgnore
-    public List<Passenger> getPassengers() {
+  
+    public List<Passanger> getPassangers() {
         return passengers;
     }
 
-    public void setPassengers(List<Passenger> passengers) {
+    public void setPassangers(List<Passanger> passengers) {
         this.passengers = passengers;
+    }
+
+	public List<Passanger> getPassengers() {
+		return passengers;
+	}
+
+	public void setPassengers(List<Passanger> passengers) {
+		this.passengers = passengers;
+	}
+
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+	
+	public JSONObject getJSON() throws JSONException
+    {
+        JSONObject flightJson=new JSONObject();
+        flightJson.put("number",this.getNumber());
+        flightJson.put("price",this.getPrice());
+        flightJson.put("from",this.getFrom());
+        flightJson.put("to",this.getTo());
+        flightJson.put("departureTime",this.getDepartureTime());
+        flightJson.put("arrivalTime",this.getArrivalTime());
+        flightJson.put("seatsLeft",this.getSeatsLeft());
+        flightJson.put("description",this.getDescription());
+        flightJson.put("plane",this.getPlane().getJSON());
+        return flightJson;
+    }
+
+    /**
+     * Flight Data as JSONObject inclusive of all Passengers details
+     * @return JSONObject
+     * @throws JSONException 
+     */
+    public JSONObject getFullJson() throws JSONException
+    {
+        JSONObject resultObject=new JSONObject();
+        JSONObject flight=this.getJSON();
+        JSONObject passengers=new JSONObject();
+        JSONArray passengerArray=new JSONArray();
+        for(Passanger passenger:this.getPassengers())
+        {
+            JSONObject pass=passenger.getJSON();
+            passengerArray.put(pass);
+        }
+        passengers.put("passenger",passengerArray);
+        flight.put("passengers",passengers);
+        resultObject.put("flight",flight);
+        return resultObject;
     }
 }
 
