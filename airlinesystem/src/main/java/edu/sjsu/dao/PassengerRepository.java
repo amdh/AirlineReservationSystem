@@ -1,11 +1,11 @@
 package edu.sjsu.dao;
 
-import edu.sjsu.compe275.lab2.Passenger;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.sjsu.compe275.lab2.Passanger;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ import java.util.List;
  */
 
 
-public interface PassengerRepository extends CrudRepository<Passenger, String> {
+public interface PassengerRepository extends CrudRepository<Passanger, String> {
 
-    List<Passenger> findByFirstname(String firstname);
+    List<Passanger> findByFirstname(String firstname);
     
-    Passenger findById(String id);
+    Passanger findById(String id);
 
 	void delete(String id);
 	
